@@ -41,6 +41,13 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
             kwargs[arg_name] = _invoke_recursive(ctx, param.default.callback)
             continue
 
+        # make sure that all name are unique
+        if any(param.name == p.name for p in ctx.builder.params):
+            raise TyperDIError(
+                f"Duplicated parameter name '{param.name}'.\n"
+                f"Please, make sure to have unique names in the whole dependency tree."
+            )
+
         # add param to wrapper
         ctx.builder.add_param(
             param.name,

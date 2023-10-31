@@ -82,7 +82,27 @@ def test_call_dependency_callback():
     command_mock.assert_called_once_with(d=42)
 
 
-# TODO: require dependency method must have only a) annotated vars, b) other deps
+def test_error_on_conflicting_names():
+    def dep(x=typer.Option(42, "-x")):
+        return x + 1
+
+    def command(x: str, d=Depends(dep)):
+        return f"{x=} {d=}"
+
+    with pytest.raises(TyperDIError, match="Duplicated parameter name 'x'"):
+        _ = create_di_wrapper(command)
+
+
+# DONE: what we do on duplicated variables?
+# DONE: typer annotations can be without providing actual option names, we must preserve names in this case
+
+# DONE: handle conflicting duplicated names
+# [x] *NO* rename parameters that has `params_decl` in corresponding `typer.ParamInfo`
+# [x] better error reports on duplicated names
+
+# TODO: recursive traversal can break parameters order required by Python
+#       (e.g.: args with defaults can't go before args without defaults)
+
 # TODO: deny varargs and kwargs in callbacks
 # TODO: don't call callbacks twice (don't collect corresponding annotations twice!)
 
