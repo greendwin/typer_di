@@ -93,17 +93,33 @@ def test_error_on_conflicting_names():
         _ = create_di_wrapper(command)
 
 
-# DONE: what we do on duplicated variables?
-# DONE: typer annotations can be without providing actual option names, we must preserve names in this case
+def test_run_each_dependency_only_once():
+    dep_mock = mock.Mock(name="dep_mock", return_value=42)
 
-# DONE: handle conflicting duplicated names
-# [x] *NO* rename parameters that has `params_decl` in corresponding `typer.ParamInfo`
-# [x] better error reports on duplicated names
+    def dep():
+        return dep_mock()
+
+    def foo(x=Depends(dep)):
+        return x
+
+    def bar(x=Depends(dep)):
+        return x
+
+    def command(x=Depends(foo), y=Depends(bar)):
+        return x + y
+
+    wrapper = create_di_wrapper(command)
+    r = wrapper()
+
+    assert r == 2 * 42
+    dep_mock.assert_called_once()
+
+
+# DONE: don't call callbacks twice (don't collect corresponding annotations twice!)
 
 # TODO: recursive traversal can break parameters order required by Python
 #       (e.g.: args with defaults can't go before args without defaults)
 
 # TODO: deny varargs and kwargs in callbacks
-# TODO: don't call callbacks twice (don't collect corresponding annotations twice!)
 
 # TBD: replace wrapped signatures by `Signature.empty` instead of `Depends`

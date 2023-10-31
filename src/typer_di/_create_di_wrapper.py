@@ -25,6 +25,7 @@ def create_di_wrapper(func: Callback) -> Callback:
 @dataclass
 class _Context:
     builder: MethodBuilder = field(default_factory=MethodBuilder)
+    known_invokes: dict[Callback, str] = field(default_factory=dict)
 
 
 def _invoke_recursive(ctx: _Context, func: Callback) -> str:
@@ -56,4 +57,10 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
         )
         kwargs[arg_name] = param.name
 
-    return ctx.builder.invoke(func, kwargs)
+    if func in ctx.known_invokes:
+        # don't call the same dependency callback twice
+        return ctx.known_invokes[func]
+
+    result = ctx.builder.invoke(func, kwargs)
+    ctx.known_invokes[func] = result
+    return result
