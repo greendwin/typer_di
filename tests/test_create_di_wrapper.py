@@ -4,7 +4,7 @@ from unittest import mock
 import typer
 
 from typer_di import Depends
-from typer_di._wrapper import create_di_wrapper
+from typer_di._create_di_wrapper import create_di_wrapper
 
 _SIG_EMPTY = inspect.Signature.empty
 
