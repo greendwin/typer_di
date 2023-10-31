@@ -1,5 +1,5 @@
-import inspect
 from dataclasses import dataclass, field
+from inspect import Signature, signature
 
 from ._depends import Callback, DependsType
 from ._method_builder import MethodBuilder, copy_func_attrs
@@ -17,6 +17,7 @@ class TyperDIError(Exception):
 def create_di_wrapper(func: Callback) -> Callback:
     ctx = _Context()
     _invoke_recursive(ctx, func)
+    _sort_params(ctx)
     wrapper = ctx.builder.build()
     copy_func_attrs(wrapper, func)
     return wrapper
@@ -32,7 +33,7 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     """
     Invoke `func` recursively and return the name of the result variable.
     """
-    sig = inspect.signature(func)
+    sig = signature(func)
 
     kwargs = {}
 
@@ -64,3 +65,10 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     result = ctx.builder.invoke(func, kwargs)
     ctx.known_invokes[func] = result
     return result
+
+
+def _sort_params(ctx: _Context):
+    # move params with defaults to the end
+    ctx.builder.params.sort(
+        key=lambda p: p.default != Signature.empty,
+    )

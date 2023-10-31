@@ -115,10 +115,27 @@ def test_run_each_dependency_only_once():
     dep_mock.assert_called_once()
 
 
-# DONE: don't call callbacks twice (don't collect corresponding annotations twice!)
+def test_sort_params_to_match_defaults():
+    def dep_x(x: int = 42):
+        return x
 
-# TODO: recursive traversal can break parameters order required by Python
+    def dep_y(y: int):
+        return y
+
+    def command(x=Depends(dep_x), y=Depends(dep_y)):
+        return x + y
+
+    wrapper = create_di_wrapper(command)
+    r = wrapper(y=10)
+
+    assert r == 42 + 10
+
+
+# DONE: don't call callbacks twice (don't collect corresponding annotations twice!)
+# DONE: recursive traversal can break parameters order required by Python
 #       (e.g.: args with defaults can't go before args without defaults)
+
+# TODO: use `get_annotations(str_eval=True)`, support str annotations
 
 # TODO: deny varargs and kwargs in callbacks
 
