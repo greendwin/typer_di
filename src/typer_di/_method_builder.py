@@ -17,6 +17,21 @@ class MethodBuilderError(Exception):
 
 
 @dataclass
+class ParamInfo:
+    name: str
+    default: Any = Signature.empty
+    annotation: Any = Signature.empty
+
+    def to_parameter(self) -> Parameter:
+        return Parameter(
+            self.name,
+            Parameter.POSITIONAL_OR_KEYWORD,
+            default=self.default,
+            annotation=self.annotation,
+        )
+
+
+@dataclass
 class InvokeInfo:
     callback: Callback
     kwargs: dict[str, str]  # arguments `k=v` that will be passed to the callback
@@ -53,33 +68,26 @@ class MethodBuilder:
      * return type annotation and other `wraps` props from `func`
     """
 
-    def __init__(self):
-        self._params: list[Parameter] = []
+    def __init__(self) -> None:
+        self._params: list[ParamInfo] = []
         self._invokes: list[InvokeInfo] = []
 
     @property
-    def params(self) -> list[Parameter]:
+    def params(self) -> list[ParamInfo]:
         return self._params
 
     def add_param(
         self,
         name: str,
         annotation: type = Signature.empty,
-        *,
         default: Any = Signature.empty,
-        kind: _ParameterKind = Parameter.POSITIONAL_OR_KEYWORD,
-    ):
+    ) -> None:
         self._params.append(
-            Parameter(
-                name,
-                kind,
-                default=default,
-                annotation=annotation,
-            )
+            ParamInfo(name=name, default=default, annotation=annotation)
         )
 
     def invoke(self, callback: Callback, kwargs: dict[str, str]) -> str:
-        # TODO: validate that `kwargs.values()` are either in `params` or `calls.result`s
+        # FIXME: validate that `kwargs.values()` are either in `params` or `calls.result`s
         result = f"__r{len(self._invokes)}"
         self._invokes.append(InvokeInfo(callback, kwargs, result))
         return result
@@ -91,9 +99,7 @@ class MethodBuilder:
         try:
             exec(program_text, globs)
         except Exception as ex:
-            raise MethodBuilderError(
-                f"Compilation failed: {ex}\nProgram text:\n{program_text}"
-            )
+            raise MethodBuilderError(f"Compilation failed: {ex}\n\n{program_text}")
 
         func = globs["func"]
         self._update_signature(func)
@@ -118,11 +124,11 @@ class MethodBuilder:
 
         return _METHOD_TEMPLATE.format(
             vars=", ".join(p.name for p in self._params),
-            invokes="".join(invokes),
+            invokes="".join(invokes).rstrip(),
             result=result,
         )
 
-    def _update_signature(self, func: Callback):
+    def _update_signature(self, func: Callback) -> None:
         # take return type from the signature of the last callback
         return_type = Signature.empty
         if self._invokes:
@@ -130,13 +136,20 @@ class MethodBuilder:
             return_type = last_sig.return_annotation
 
         # setup wrapper signature
-        func.__signature__ = Signature(
-            self._params,
+        func.__signature__ = Signature(  # type: ignore
+            [p.to_parameter() for p in self._params],
             return_annotation=return_type,
         )
 
+        # setup defaults
+        func.__defaults__ = tuple(
+            param.default
+            for param in self._params
+            if param.default is not Signature.empty
+        )
 
-def copy_func_attrs(wrapper: Callback, func: Callback):
+
+def copy_func_attrs(wrapper: Callback, func: Callback) -> None:
     # update all except `__annotations__`, to avoid overriding signature
     assigned = set(WRAPPER_ASSIGNMENTS)
     assigned.remove("__annotations__")

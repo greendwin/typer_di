@@ -12,22 +12,22 @@ def builder() -> MethodBuilder:
 
 
 def test_create_empty(builder: MethodBuilder):
-    wr = builder.build()
-    assert wr.__name__ == "func"  # just some name
-    assert wr() is None  # empty body
-    assert str(signature(wr)) == "()"
+    func = builder.build()
+    assert func.__name__ == "func"  # just some name
+    assert func() is None  # empty body
+    assert str(signature(func)) == "()"
 
 
 def test_copy_func_attrs(builder: MethodBuilder):
     def foo():
         pass
 
-    wr = builder.build()
+    func = builder.build()
 
-    copy_func_attrs(wr, foo)
-    assert wr.__name__ == foo.__name__
-    assert wr.__qualname__ == foo.__qualname__
-    assert wr.__module__ == foo.__module__
+    copy_func_attrs(func, foo)
+    assert func.__name__ == foo.__name__
+    assert func.__qualname__ == foo.__qualname__
+    assert func.__module__ == foo.__module__
 
 
 def test_copy_func_attrs_dont_break_signature(builder: MethodBuilder):
@@ -36,11 +36,11 @@ def test_copy_func_attrs_dont_break_signature(builder: MethodBuilder):
 
     builder.add_param("x")
     builder.add_param("y")
-    wr = builder.build()
+    func = builder.build()
 
-    copy_func_attrs(wr, foo)
+    copy_func_attrs(func, foo)
 
-    assert str(signature(wr)) == "(x, y)"
+    assert str(signature(func)) == "(x, y)"
 
 
 def test_setup_parameters(builder: MethodBuilder):
@@ -53,9 +53,9 @@ def test_invoke_callbacks(builder: MethodBuilder):
     callback = mock.Mock()
     builder.add_param("x")
     builder.invoke(callback, kwargs={"a": "x", "b": "x"})
-    wrapper = builder.build()
+    func = builder.build()
 
-    wrapper(42)
+    func(42)
 
     callback.assert_called_once_with(a=42, b=42)
 
@@ -67,9 +67,9 @@ def test_return_last_result(builder: MethodBuilder):
     builder.invoke(first, {})
     builder.invoke(second, {})
     builder.invoke(last, {})
-    wrapper = builder.build()
+    func = builder.build()
 
-    result = wrapper()
+    result = func()
 
     # all callbacks must be invoked
     first.assert_called_once_with()
@@ -85,9 +85,9 @@ def test_setup_return_type(builder: MethodBuilder):
         ...
 
     builder.invoke(ret_int, {})
-    wrapper = builder.build()
+    func = builder.build()
 
-    assert str(signature(wrapper)) == "() -> int"
+    assert str(signature(func)) == "() -> int"
 
 
 def test_complex_chain(builder: MethodBuilder):
@@ -106,7 +106,20 @@ def test_complex_chain(builder: MethodBuilder):
     r3 = builder.invoke(mul, {"x": r1, "y": r2})
     builder.invoke(add, {"x": r3, "y": "b"})
 
-    wrapper = builder.build()
+    func = builder.build()
 
     # (1+2)*(1+3)+2 = 3*4+2 = 14
-    assert wrapper(1, 2, 3) == 14
+    assert func(1, 2, 3) == 14
+
+
+def test_setup_defaults_for_pos_args(builder: MethodBuilder):
+    def add(x, y):
+        return x + y
+
+    builder.add_param("x")
+    builder.add_param("y", default=42)
+    builder.invoke(add, {"x": "x", "y": "y"})
+
+    func = builder.build()
+
+    assert func(1) == 43
