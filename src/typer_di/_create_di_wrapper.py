@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from inspect import Signature, signature
+from inspect import Parameter, Signature, signature
 
 from ._depends import Callback, DependsType
 from ._method_builder import MethodBuilder, copy_func_attrs
@@ -39,8 +39,9 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
 
     for param in sig.parameters.values():
         arg_name = param.name
-        if isinstance(param.default, DependsType):
-            kwargs[arg_name] = _invoke_recursive(ctx, param.default.callback)
+        depends_type = _parse_dependency(param)
+        if depends_type is not None:
+            kwargs[arg_name] = _invoke_recursive(ctx, depends_type.callback)
             continue
 
         # make sure that all name are unique
@@ -67,7 +68,19 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     return result
 
 
-def _sort_params(ctx: _Context):
+def _parse_dependency(param: Parameter) -> DependsType | None:
+    if isinstance(param.default, DependsType):
+        return param.default
+
+    metadata = getattr(param.annotation, "__metadata__", ())
+    for p in metadata:
+        if isinstance(p, DependsType):
+            return p
+
+    return None
+
+
+def _sort_params(ctx: _Context) -> None:
     # move params with defaults to the end
     ctx.builder.params.sort(
         key=lambda p: p.default != Signature.empty,

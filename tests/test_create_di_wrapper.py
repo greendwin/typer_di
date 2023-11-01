@@ -1,9 +1,11 @@
 from inspect import Signature, signature
+from typing import Annotated, Any
 from unittest import mock
 
 import pytest
 import typer
 
+from tests.helpers import assert_words_in_message
 from typer_di import Depends, TyperDIError, create_di_wrapper
 
 
@@ -82,6 +84,26 @@ def test_call_dependency_callback():
     command_mock.assert_called_once_with(d=42)
 
 
+def test_call_dependency_by_annotation():
+    dep_mock = mock.Mock(name="dep", return_value=42)
+    command_mock = mock.Mock(name="command")
+
+    def dep():
+        return dep_mock()
+
+    def command(d: Annotated[Any, Depends(dep)]):
+        command_mock(d=d)
+
+    wrapper = create_di_wrapper(command)
+    wrapper()
+
+    # invoke callback
+    dep_mock.assert_called_once_with()
+
+    # pass its result to the command
+    command_mock.assert_called_once_with(d=42)
+
+
 def test_error_on_conflicting_names():
     def dep(x=typer.Option(42, "-x")):
         return x + 1
@@ -131,12 +153,7 @@ def test_sort_params_to_match_defaults():
     assert r == 42 + 10
 
 
-# DONE: don't call callbacks twice (don't collect corresponding annotations twice!)
-# DONE: recursive traversal can break parameters order required by Python
-#       (e.g.: args with defaults can't go before args without defaults)
-
 # TODO: use `get_annotations(str_eval=True)`, support str annotations
-
 # TODO: deny varargs and kwargs in callbacks
 
 # TBD: replace wrapped signatures by `Signature.empty` instead of `Depends`
