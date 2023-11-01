@@ -4,6 +4,7 @@ from unittest import mock
 
 import pytest
 import typer
+from tests.helpers import assert_words_in_message
 
 from tests.helpers import assert_words_in_message
 from typer_di import Depends, TyperDIError, create_di_wrapper
@@ -111,8 +112,10 @@ def test_error_on_conflicting_names():
     def command(x: str, d=Depends(dep)):
         return f"{x=} {d=}"
 
-    with pytest.raises(TyperDIError, match="Duplicated parameter name 'x'"):
+    with pytest.raises(TyperDIError) as ctx:
         _ = create_di_wrapper(command)
+
+    assert_words_in_message("duplicated parameter name 'x'", ctx.value)
 
 
 def test_run_each_dependency_only_once():
