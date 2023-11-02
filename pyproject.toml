@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "typer-di"
+version = "0.1.0"
+description = "Extension for `typer` for dependency injection like in FastAPI"
+authors = ["Evgeniy A. Cymbalyuk <cimbaluk@gmail.com>"]
+readme = "README.md"
+
+packages = [{ include = "typer_di", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
