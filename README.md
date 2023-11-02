@@ -62,19 +62,3 @@ def first(..., config: Config = Depends(get_config)]):
 def second(..., config: Config = Depends(get_config)]):
     ...
 ```
-
-
-## Roadmap
-
-### MS-1
-- [x] 📖 write detailed description with code examples
-- [ ] 📁 push this repo to `github`
-- [ ] 📁 push package to pypi (create tokens and etc., research it!)
-
-### MS-2
-- [ ] ✍️ include all `typer` declarations to `typer_di` (like in examples above)
-- [ ] ✍️ support *future* `annotations`
-- [ ] 🐞 dependency can be called multiple times in `callback` and `command`: we need to cache such calls through whole program execution
-
-### MS-3
-- [ ] ✍️ fix tests up to py3.8
