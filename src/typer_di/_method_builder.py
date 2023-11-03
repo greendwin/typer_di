@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import WRAPPER_ASSIGNMENTS
-from inspect import Parameter, Signature, _ParameterKind, signature
+from inspect import Parameter, Signature, signature
 from typing import Any
 
 from ._depends import Callback
@@ -132,7 +132,7 @@ class MethodBuilder:
         # take return type from the signature of the last callback
         return_type = Signature.empty
         if self._invokes:
-            last_sig = signature(self._invokes[-1].callback)
+            last_sig = signature(self._invokes[-1].callback, eval_str=True)
             return_type = last_sig.return_annotation
 
         # setup wrapper signature

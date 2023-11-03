@@ -4,7 +4,6 @@ from unittest import mock
 
 import pytest
 import typer
-from tests.helpers import assert_words_in_message
 
 from tests.helpers import assert_words_in_message
 from typer_di import Depends, TyperDIError, create_di_wrapper
@@ -107,10 +106,10 @@ def test_call_dependency_by_annotation():
 
 def test_error_on_conflicting_names():
     def dep(x=typer.Option(42, "-x")):
-        return x + 1
+        ...
 
     def command(x: str, d=Depends(dep)):
-        return f"{x=} {d=}"
+        ...
 
     with pytest.raises(TyperDIError) as ctx:
         _ = create_di_wrapper(command)
@@ -140,13 +139,15 @@ def test_run_each_dependency_only_once():
     dep_mock.assert_called_once()
 
 
+def dep_x(x: int = 42):
+    return x
+
+
+def dep_y(y: int):
+    return y
+
+
 def test_sort_params_to_match_defaults():
-    def dep_x(x: int = 42):
-        return x
-
-    def dep_y(y: int):
-        return y
-
     def command(x=Depends(dep_x), y=Depends(dep_y)):
         return x + y
 
@@ -156,7 +157,19 @@ def test_sort_params_to_match_defaults():
     assert r == 42 + 10
 
 
-# TODO: use `get_annotations(str_eval=True)`, support str annotations
+def test_support_lazy_eval_annotations():
+    def command(
+        x: "Annotated[int, Depends(dep_x)]", y: "Annotated[int, Depends(dep_y)]"
+    ):
+        return x + y
+
+    wrapper = create_di_wrapper(command)
+    r = wrapper(y=10)
+
+    assert r == 42 + 10
+
+
+# DONE: use `get_annotations(str_eval=True)`, support str annotations
 # TODO: deny varargs and kwargs in callbacks
 
 # TBD: replace wrapped signatures by `Signature.empty` instead of `Depends`

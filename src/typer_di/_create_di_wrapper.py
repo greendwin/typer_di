@@ -33,7 +33,7 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     """
     Invoke `func` recursively and return the name of the result variable.
     """
-    sig = signature(func)
+    sig = signature(func, eval_str=True)
 
     kwargs = {}
 

@@ -7,7 +7,7 @@
 
 ## MS-2 - v0.1.0
 - [ ] ✍️ include all `typer` declarations to `typer_di` (like in examples above)
-- [ ] ✍️ support *future* `annotations`
+- [x] ✍️ support *future* `annotations`
 - [ ] 🐞 dependency can be called multiple times in `callback` and `command`: we need to cache such calls through whole program execution
 - [ ] 📖 specify supported python versions
 - [ ] 📖 add patch notes
