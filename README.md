@@ -63,3 +63,10 @@ def first(..., config: Config = Depends(get_config)):
 def second(..., config: Config = Depends(get_config)):
     ...
 ```
+
+
+## Release Notes
+
+### v0.1.0
+- first public version
+- support py37+
