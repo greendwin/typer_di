@@ -1,5 +1,10 @@
+from typing import Optional, Union
+
+
 def assert_words_in_message(
-    words: str | list[str], message: str | Exception, require_same_line: bool = False
+    words: Union[str, list[str]],
+    message: Union[str, Exception],
+    require_same_line: bool = False,
 ) -> None:
     if isinstance(words, str):
         words = words.split()
@@ -32,7 +37,7 @@ def assert_words_in_message(
             )
 
 
-def _find_missing_word(words: list[str], text: str) -> int | None:
+def _find_missing_word(words: list[str], text: str) -> Optional[int]:
     for idx, p in enumerate(words):
         if p not in text:
             return idx

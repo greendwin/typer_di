@@ -9,7 +9,7 @@ license = "LICENCE.txt"
 packages = [{ include = "typer_di", from = "src" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 typer = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -28,7 +28,7 @@ show_missing = true
 skip_empty = true
 skip_covered = true
 sort = "cover"
-exclude_lines = ["if TYPE_CHECKING:", "\\.\\.\\."]
+exclude_lines = ["if TYPE_CHECKING:", "\\.\\.\\.", "# pragma: no cover"]
 
 [tool.coverage.xml]
 output = "coverage.xml"

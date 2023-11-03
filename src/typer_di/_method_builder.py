@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from functools import WRAPPER_ASSIGNMENTS
-from inspect import Parameter, Signature, signature
+from inspect import Parameter, Signature
 from typing import Any
 
+from ._compat import signature
 from ._depends import Callback
 
 __all__ = [

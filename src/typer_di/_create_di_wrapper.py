@@ -1,8 +1,10 @@
 from dataclasses import dataclass, field
-from inspect import Parameter, Signature, signature
+from inspect import Parameter, Signature
+from typing import Optional
 
 from ._depends import Callback, DependsType
 from ._method_builder import MethodBuilder, copy_func_attrs
+from ._compat import signature
 
 __all__ = [
     "create_di_wrapper",
@@ -68,7 +70,7 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     return result
 
 
-def _parse_dependency(param: Parameter) -> DependsType | None:
+def _parse_dependency(param: Parameter) -> Optional[DependsType]:
     if isinstance(param.default, DependsType):
         return param.default
 

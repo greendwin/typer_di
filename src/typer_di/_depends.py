@@ -1,4 +1,6 @@
-from typing import TYPE_CHECKING, Any, Callable, TypeAlias, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
+
+from ._compat import TypeAlias
 
 __all__ = [
     "Depends",
