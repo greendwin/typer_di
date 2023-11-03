@@ -47,7 +47,8 @@ All you need is to use `Depends` annotation and replace the original `Typer` by 
 
 ```python
 from typing import Annotated
-from typer_di import TyperDI, Option, Depends
+from typer import Option
+from typer_di import TyperDI, Depends
 
 app = TyperDI()
 
@@ -55,10 +56,10 @@ def get_config(config_path: Annotated[Path, Option("--config")]) -> Config:
     ...
 
 @app.command()
-def first(..., config: Config = Depends(get_config)]):
+def first(..., config: Config = Depends(get_config)):
     ...
 
 @app.command()
-def second(..., config: Config = Depends(get_config)]):
+def second(..., config: Config = Depends(get_config)):
     ...
 ```
