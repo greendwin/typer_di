@@ -1,5 +1,5 @@
 from inspect import Signature, signature
-from typing import Annotated, Any
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -7,6 +7,7 @@ import typer
 
 from tests.helpers import assert_words_in_message
 from typer_di import Depends, TyperDIError, create_di_wrapper
+from typer_di.compat import Annotated
 
 
 def test_call_original_method():

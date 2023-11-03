@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import List
 from unittest import mock
 
 import pytest
@@ -7,6 +7,7 @@ from typer.testing import CliRunner
 
 from tests.helpers import assert_words_in_message
 from typer_di import Depends, TyperDI
+from typer_di.compat import Annotated
 
 
 class TestAssignDepends:
@@ -55,7 +56,7 @@ class TestAnnotationDepends:
             return [x]
 
         @app.command()
-        def command(cfg: Annotated[list[str], Depends(get_config)]):
+        def command(cfg: Annotated[List[str], Depends(get_config)]):
             command_mock(cfg=cfg)
 
         return app

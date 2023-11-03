@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from functools import WRAPPER_ASSIGNMENTS
 from inspect import Parameter, Signature
-from typing import Any
+from typing import Any, Dict, List
 
-from ._compat import signature
 from ._depends import Callback
+from .compat import signature
 
 __all__ = [
     "MethodBuilder",
@@ -35,7 +35,7 @@ class ParamInfo:
 @dataclass
 class InvokeInfo:
     callback: Callback
-    kwargs: dict[str, str]  # arguments `k=v` that will be passed to the callback
+    kwargs: Dict[str, str]  # arguments `k=v` that will be passed to the callback
     result: str  # variable that holds invocation result
 
 
@@ -70,11 +70,11 @@ class MethodBuilder:
     """
 
     def __init__(self) -> None:
-        self._params: list[ParamInfo] = []
-        self._invokes: list[InvokeInfo] = []
+        self._params: List[ParamInfo] = []
+        self._invokes: List[InvokeInfo] = []
 
     @property
-    def params(self) -> list[ParamInfo]:
+    def params(self) -> List[ParamInfo]:
         return self._params
 
     def add_param(
@@ -87,7 +87,7 @@ class MethodBuilder:
             ParamInfo(name=name, default=default, annotation=annotation)
         )
 
-    def invoke(self, callback: Callback, kwargs: dict[str, str]) -> str:
+    def invoke(self, callback: Callback, kwargs: Dict[str, str]) -> str:
         # FIXME: validate that `kwargs.values()` are either in `params` or `calls.result`s
         result = f"__r{len(self._invokes)}"
         self._invokes.append(InvokeInfo(callback, kwargs, result))

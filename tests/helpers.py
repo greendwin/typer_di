@@ -1,8 +1,8 @@
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 
 def assert_words_in_message(
-    words: Union[str, list[str]],
+    words: Union[str, List[str]],
     message: Union[str, Exception],
     require_same_line: bool = False,
 ) -> None:
@@ -37,7 +37,7 @@ def assert_words_in_message(
             )
 
 
-def _find_missing_word(words: list[str], text: str) -> Optional[int]:
+def _find_missing_word(words: List[str], text: str) -> Optional[int]:
     for idx, p in enumerate(words):
         if p not in text:
             return idx

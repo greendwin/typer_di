@@ -1,6 +1,11 @@
 import inspect
 import sys
 
+if sys.version_info >= (3, 9):
+    from typing import Annotated
+else:  # pragma: no cover
+    from typing_extensions import Annotated
+
 if sys.version_info >= (3, 10):
     from typing import TypeAlias
 else:  # pragma: no cover

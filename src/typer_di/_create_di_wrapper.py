@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from inspect import Parameter, Signature
-from typing import Optional
+from typing import Dict, Optional
 
 from ._depends import Callback, DependsType
 from ._method_builder import MethodBuilder, copy_func_attrs
-from ._compat import signature
+from .compat import signature
 
 __all__ = [
     "create_di_wrapper",
@@ -28,7 +28,7 @@ def create_di_wrapper(func: Callback) -> Callback:
 @dataclass
 class _Context:
     builder: MethodBuilder = field(default_factory=MethodBuilder)
-    known_invokes: dict[Callback, str] = field(default_factory=dict)
+    known_invokes: Dict[Callback, str] = field(default_factory=dict)
 
 
 def _invoke_recursive(ctx: _Context, func: Callback) -> str:
