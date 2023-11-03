@@ -19,8 +19,19 @@ icecream = "^2.1.3"
 mypy = "^1.6.1"
 
 [tool.pytest.ini_options]
+addopts = ["--cov=.", "--cov-report=term", "--cov-report=xml"]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+skip_covered = true
+sort = "cover"
+exclude_lines = ["if TYPE_CHECKING:", "\\.\\.\\."]
+
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.mypy]
 mypy_path = "src"

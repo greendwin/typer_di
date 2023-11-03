@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from typer_di import MethodBuilder, copy_func_attrs
+from typer_di import MethodBuilder, MethodBuilderError, copy_func_attrs
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def test_create_empty(builder: MethodBuilder):
 
 def test_copy_func_attrs(builder: MethodBuilder):
     def foo():
-        pass
+        ...
 
     func = builder.build()
 
@@ -32,7 +32,7 @@ def test_copy_func_attrs(builder: MethodBuilder):
 
 def test_copy_func_attrs_dont_break_signature(builder: MethodBuilder):
     def foo():
-        pass
+        ...
 
     builder.add_param("x")
     builder.add_param("y")
@@ -123,3 +123,13 @@ def test_setup_defaults_for_pos_args(builder: MethodBuilder):
     func = builder.build()
 
     assert func(1) == 43
+
+
+def test_show_program_text_on_compilation_error(builder: MethodBuilder):
+    def add(x, y):
+        ...
+
+    builder.invoke(add, {"x": "x", "1": "y"})
+
+    with pytest.raises(MethodBuilderError, match="1=y"):
+        _ = builder.build()
