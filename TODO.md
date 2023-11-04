@@ -2,7 +2,7 @@
 
 ### MS-3 - v0.1.1
 
-- [ ] 🐞 invalid duplicated names validation
+- [x] 🐞 invalid duplicated names validation
 - [ ] ✍️ add checks for loops in dependencies
 - [ ] ⭐ publish `v0.1.1` 
 

@@ -143,3 +143,56 @@ class TestTyperCallbacksInConstructor:
 
         assert r.exit_code == 0
         my_callback_mock.assert_called_once_with(cfg=["test/path"])
+
+
+class TestReuseDependency:
+    @pytest.fixture
+    def first_mock(self) -> mock.Mock:
+        return mock.Mock(name="first_mock", return_value="first")
+
+    @pytest.fixture
+    def second_mock(self) -> mock.Mock:
+        return mock.Mock(name="second_mock", return_value="second")
+
+    @pytest.fixture
+    def command_mock(self) -> mock.Mock:
+        return mock.Mock(name="command_mock")
+
+    @pytest.fixture
+    def app(
+        self, first_mock: mock.Mock, second_mock: mock.Mock, command_mock: mock.Mock
+    ) -> TyperDI:
+        def get_first(opt: Annotated[str, typer.Option("--opt")]):
+            return first_mock(opt=opt)
+
+        def get_second(first=Depends(get_first)):
+            return second_mock(first=first)
+
+        app = TyperDI()
+
+        @app.command("hello")
+        def cmd_hello(first=Depends(get_first), second=Depends(get_second)):
+            command_mock(first=first, second=second)
+
+        return app
+
+    def test_show_option_in_help(self, app: TyperDI):
+        r = CliRunner().invoke(app, "--help")
+
+        assert r.exit_code == 0
+        assert_words_in_message("--opt TEXT", r.output, require_same_line=True)
+
+    def test_invoke_all(
+        self,
+        app: TyperDI,
+        first_mock: mock.Mock,
+        second_mock: mock.Mock,
+        command_mock: mock.Mock,
+    ):
+        r = CliRunner().invoke(app, "--opt=hello")
+
+        assert r.exit_code == 0
+
+        first_mock.assert_called_once_with(opt="hello")
+        second_mock.assert_called_once_with(first="first")
+        command_mock.assert_called_once_with(first="first", second="second")

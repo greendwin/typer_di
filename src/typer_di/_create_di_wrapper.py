@@ -35,6 +35,12 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     """
     Invoke `func` recursively and return the name of the result variable.
     """
+    if func in ctx.known_invokes:
+        # don't call the same dependency callback twice
+        return ctx.known_invokes[func]
+
+    # FIXME: we should mark this `func` as known, and validate that it's beeing processed (aka loop detected)
+
     sig = signature(func, eval_str=True)
 
     kwargs = {}
@@ -60,10 +66,6 @@ def _invoke_recursive(ctx: _Context, func: Callback) -> str:
             default=param.default,
         )
         kwargs[arg_name] = param.name
-
-    if func in ctx.known_invokes:
-        # don't call the same dependency callback twice
-        return ctx.known_invokes[func]
 
     result = ctx.builder.invoke(func, kwargs)
     ctx.known_invokes[func] = result
