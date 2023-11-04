@@ -1,11 +1,27 @@
 # Roadmap
 
-## MS-1 - pypi
+### MS-3 - v0.1.1
+
+- [ ] 🐞 invalid duplicated names validation
+- [ ] ✍️ add checks for loops in dependencies
+- [ ] ⭐ publish `v0.1.1` 
+
+### MS-4 - github automation
+
+- [ ] ✍️ use github workflows
+- [ ] 📖 add tests status to repo page
+
+
+## History
+
+### MS-1 - pypi
+
 - [x] 📖 write detailed description with code examples
 - [x] ⭐ push this repo to `github`
 - [x] ⭐ push package to pypi (create tokens and etc., research it!)
 
-## MS-2 - v0.1.0
+### MS-2 - v0.1.0
+
 - [x] ✍️ **NO** include all `typer` declarations to `typer_di` (like in examples above)
 - [x] ✍️ support *future* `annotations`
 - [x] ✍️ fix tests up to py3.7
@@ -14,6 +30,3 @@
 - [x] 📖 add patch notes
 - [x] ⭐ publish `v0.1.0` 
 
-## MS-3 - github automation
-- [ ] ✍️ use github workflows
-- [ ] 📖 add tests status to repo page
