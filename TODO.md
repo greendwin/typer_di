@@ -8,9 +8,10 @@
 
 ### MS-5 - github automation
 
-- [ ] ✍️ use github workflows
+- [ ] ✍️ use github workflows:
+  - [x] pytest on all py versions
+  - [ ] publish releases
 - [ ] 📖 add tests status to repo page
-
 
 ## History
 
