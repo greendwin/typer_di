@@ -4,8 +4,8 @@
 
 - [x] 🐞 invalid duplicated names validation
 - [x] ✍️ add checks for loops in dependencies
-- [ ] 📖 add patch notes
-- [ ] ⭐ publish `v0.1.1` 
+- [x] 📖 add patch notes
+- [x] ⭐ publish `v0.1.1` 
 
 ### MS-4 - github automation
 
