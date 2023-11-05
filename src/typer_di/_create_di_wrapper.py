@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from inspect import Parameter, Signature
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 from ._depends import Callback, DependsType
 from ._method_builder import MethodBuilder, copy_func_attrs
@@ -13,7 +13,8 @@ __all__ = [
 
 
 class TyperDIError(Exception):
-    pass
+    def __init__(self, message: str):
+        super().__init__(message)
 
 
 def create_di_wrapper(func: Callback) -> Callback:
@@ -28,18 +29,25 @@ def create_di_wrapper(func: Callback) -> Callback:
 @dataclass
 class _Context:
     builder: MethodBuilder = field(default_factory=MethodBuilder)
-    known_invokes: Dict[Callback, str] = field(default_factory=dict)
+    known_invokes: Dict[Callback, Union[str, None]] = field(default_factory=dict)
 
 
 def _invoke_recursive(ctx: _Context, func: Callback) -> str:
     """
     Invoke `func` recursively and return the name of the result variable.
     """
+    # don't call the same dependency callback twice
     if func in ctx.known_invokes:
-        # don't call the same dependency callback twice
-        return ctx.known_invokes[func]
+        result = ctx.known_invokes[func]
+        if result is None:
+            # cycle found
+            raise TyperDIError(
+                f'Found cycle in dependency graph around method "{func.__qualname__}"'
+            )
 
-    # FIXME: we should mark this `func` as known, and validate that it's beeing processed (aka loop detected)
+        return result
+
+    ctx.known_invokes[func] = None  # mark this dependency as being processed
 
     sig = signature(func, eval_str=True)
 

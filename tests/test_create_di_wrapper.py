@@ -170,7 +170,34 @@ def test_support_lazy_eval_annotations():
     assert r == 42 + 10
 
 
-# DONE: use `get_annotations(str_eval=True)`, support str annotations
+# `str_eval` annotations require all definitions to be present in global scope
+
+
+def get_loop_first(third: "Annotated[int, Depends(get_loop_third)]"):
+    ...
+
+
+def get_loop_second(first: "Annotated[int, Depends(get_loop_first)]"):
+    ...
+
+
+def get_loop_third(second: "Annotated[int, Depends(get_loop_second)]"):
+    ...
+
+
+def test_error_on_cycles():
+    def command(x: str, d=Depends(get_loop_first)):
+        ...
+
+    with pytest.raises(TyperDIError) as ctx:
+        _ = create_di_wrapper(command)
+
+    assert_words_in_message(
+        "cycle in dependency graph get_loop_first",
+        ctx.value,
+    )
+
+
 # TODO: deny varargs and kwargs in callbacks
 
 # TBD: replace wrapped signatures by `Signature.empty` instead of `Depends`

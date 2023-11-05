@@ -3,7 +3,8 @@
 ### MS-3 - v0.1.1
 
 - [x] 🐞 invalid duplicated names validation
-- [ ] ✍️ add checks for loops in dependencies
+- [x] ✍️ add checks for loops in dependencies
+- [ ] 📖 add patch notes
 - [ ] ⭐ publish `v0.1.1` 
 
 ### MS-4 - github automation
