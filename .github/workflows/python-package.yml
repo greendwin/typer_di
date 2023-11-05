@@ -17,6 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        poetry-version: ["1.7.0"]
 
     steps:
     - uses: actions/checkout@v3
@@ -24,11 +25,16 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setup poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: ${{ matrix.poetry-version }}
     - name: Install dependencies
       run: |
+        poetry export --output requirements.txt
         python -m pip install --upgrade pip
-        python -m pip install flake8 poetry
-        poetry install
+        python -m pip install flake8 pytest pytest-cov mypy
+        python -m pip install -r requirements.txt
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -37,4 +43,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        poetry run pytest
+        pytest
+    - name: Check typing
+      run: |
+        mypy
+  
