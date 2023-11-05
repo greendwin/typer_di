@@ -1,13 +1,12 @@
 # Roadmap
 
-### MS-3 - v0.1.1
+### MS-4 - v0.1.2
 
-- [x] 🐞 invalid duplicated names validation
-- [x] ✍️ add checks for loops in dependencies
-- [x] 📖 add patch notes
-- [x] ⭐ publish `v0.1.1` 
+- [ ] ✍️ add `py.typed` to package
+- [ ] 📖 add patch notes
+- [ ] ⭐ publish `v0.1.2` 
 
-### MS-4 - github automation
+### MS-5 - github automation
 
 - [ ] ✍️ use github workflows
 - [ ] 📖 add tests status to repo page
@@ -31,3 +30,10 @@
 - [x] 📖 add patch notes
 - [x] ⭐ publish `v0.1.0` 
 
+
+### MS-3 - v0.1.1
+
+- [x] 🐞 invalid duplicated names validation
+- [x] ✍️ add checks for loops in dependencies
+- [x] 📖 add patch notes
+- [x] ⭐ publish `v0.1.1` 
