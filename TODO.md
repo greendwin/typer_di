@@ -2,7 +2,7 @@
 
 ### MS-4 - v0.1.2
 
-- [ ] ✍️ add `py.typed` to package
+- [x] ✍️ add `py.typed` to package
 - [ ] 📖 add patch notes
 - [ ] ⭐ publish `v0.1.2` 
 

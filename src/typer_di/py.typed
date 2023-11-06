@@ -1,0 +1,1 @@
+# marker to tell `mypy` that `typer_di` has type annotations
