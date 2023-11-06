@@ -1,12 +1,15 @@
 [tool.poetry]
 name = "typer-di"
-version = "0.1.1"
+version = "0.1.2a2"
 description = "Extension for `typer` for dependency injection like in FastAPI"
 authors = ["Evgeniy A. Cymbalyuk <cimbaluk@gmail.com>"]
 readme = "README.md"
 license = "LICENCE.txt"
 
-packages = [{ include = "typer_di", from = "src" }]
+packages = [
+    { include = "typer_di", from = "src" },
+    { include = "typer_di/py.typed", from = "src" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
