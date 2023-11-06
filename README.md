@@ -67,6 +67,9 @@ def second(..., config: Config = Depends(get_config)):
 
 ## Release Notes
 
+### v0.1.2
+- add `py.typed` marker to the package
+
 ### v0.1.1
 - fix invalid validation for duplicated names
 - check for loops in dependency graph
