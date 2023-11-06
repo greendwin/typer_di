@@ -3,15 +3,17 @@
 ### MS-4 - v0.1.2
 
 - [x] ✍️ add `py.typed` to package
-- [ ] 📖 add patch notes
+- [x] 📖 add patch notes
 - [ ] ⭐ publish `v0.1.2` 
 
-### MS-5 - github automation
 
+### MS-5 - v0.1.3
 - [ ] ✍️ use github workflows:
   - [x] pytest on all py versions
-  - [ ] publish releases
+  - [x] use cache for pip
+  - [ ] automate publishing
 - [ ] 📖 add tests status to repo page
+
 
 ## History
 
