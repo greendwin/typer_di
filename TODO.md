@@ -1,16 +1,15 @@
 # Roadmap
 
-### MS-3 - v0.1.1
+### MS-4 - v0.1.2
 
-- [x] 🐞 invalid duplicated names validation
-- [x] ✍️ add checks for loops in dependencies
+- [x] ✍️ add `py.typed` to package
 - [x] 📖 add patch notes
-- [x] ⭐ publish `v0.1.1` 
-
-### MS-4 - github automation
-
-- [ ] ✍️ use github workflows
+- [ ] ✍️ use github workflows:
+  - [x] pytest on all py versions
+  - [x] use cache for pip
+  - [ ] automate publishing
 - [ ] 📖 add tests status to repo page
+- [ ] ⭐ publish `v0.1.2` 
 
 
 ## History
@@ -31,3 +30,10 @@
 - [x] 📖 add patch notes
 - [x] ⭐ publish `v0.1.0` 
 
+
+### MS-3 - v0.1.1
+
+- [x] 🐞 invalid duplicated names validation
+- [x] ✍️ add checks for loops in dependencies
+- [x] 📖 add patch notes
+- [x] ⭐ publish `v0.1.1` 
