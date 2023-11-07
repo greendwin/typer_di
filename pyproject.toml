@@ -6,10 +6,7 @@ authors = ["Evgeniy A. Cymbalyuk <cimbaluk@gmail.com>"]
 readme = "README.md"
 license = "LICENCE.txt"
 
-packages = [
-    { include = "typer_di", from = "src" },
-    { include = "typer_di/py.typed", from = "src" },
-]
+packages = [{ include = "typer_di", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.7"
