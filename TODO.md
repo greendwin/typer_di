@@ -1,17 +1,12 @@
 # Roadmap
 
-### v0.1.2
-
-- [x] ✍️ add `py.typed` to package
+### v0.1.3
+- [x] ✍️ simplified dependency to `typer-slim`
+- [x] ✍️ use strict typing
 - [x] 📖 add patch notes
-- [x] ⭐ publish `v0.1.2` 
-
+- [ ] ⭐ publish `v0.1.3` 
 
 ### v0.1.4
-- [x] simplified dependency to `typer-slim`
-- [ ] use strict typing
-
-### v0.1.5
 - [ ] ✍️ use github workflows:
   - [x] pytest on all py versions
   - [x] use cache for pip

@@ -67,6 +67,10 @@ def second(..., config: Config = Depends(get_config)):
 
 ## Release Notes
 
+### v0.1.3
+- depend on `typer-slim`
+- use strict typing
+
 ### v0.1.2
 - add `py.typed` marker to the package
 
