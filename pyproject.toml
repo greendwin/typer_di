@@ -36,6 +36,7 @@ output = "coverage.xml"
 [tool.mypy]
 mypy_path = "src"
 packages = "typer_di"
+strict = true
 
 [build-system]
 requires = ["poetry-core"]

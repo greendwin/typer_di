@@ -29,7 +29,7 @@ class TyperDI(typer.Typer):
 
 def wrap_typer_decorator(decor: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(decor)
-    def inner(func):
+    def inner(func: Callable[..., Any]) -> Callable[..., Any]:
         # pass wrapper to the typer
         decor(create_di_wrapper(func))
 
