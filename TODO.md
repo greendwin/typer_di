@@ -1,13 +1,17 @@
 # Roadmap
 
-### MS-4 - v0.1.2
+### v0.1.2
 
 - [x] ✍️ add `py.typed` to package
 - [x] 📖 add patch notes
-- [ ] ⭐ publish `v0.1.2` 
+- [x] ⭐ publish `v0.1.2` 
 
 
-### MS-5 - v0.1.3
+### v0.1.4
+- [x] simplified dependency to `typer-slim`
+- [ ] use strict typing
+
+### v0.1.5
 - [ ] ✍️ use github workflows:
   - [x] pytest on all py versions
   - [x] use cache for pip
