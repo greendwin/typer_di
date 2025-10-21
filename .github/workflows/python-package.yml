@@ -27,6 +27,10 @@ jobs:
             poetry-version: '1.8.5'
           - python-version: '3.12'
             poetry-version: '1.8.5'
+          - python-version: '3.13'
+            poetry-version: '1.8.5'
+          - python-version: '3.14'
+            poetry-version: '1.8.5'
 
     steps:
     - uses: actions/checkout@v3
