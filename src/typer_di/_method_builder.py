@@ -151,9 +151,9 @@ class MethodBuilder:
 
 
 def copy_func_attrs(wrapper: Callback, func: Callback) -> None:
-    # update all except `__annotations__`, to avoid overriding signature
+    # update all except `__annotations__`/`__annotate__`, to avoid overriding signature
     assigned = set(WRAPPER_ASSIGNMENTS)
-    assigned.remove("__annotations__")
+    assigned -= {"__annotations__", "__annotate__"}
 
     for name in assigned:
         setattr(wrapper, name, getattr(func, name))
