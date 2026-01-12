@@ -67,6 +67,10 @@ def second(..., config: Config = Depends(get_config)):
 
 ## Release Notes
 
+### v0.1.4
+- support python 3.14
+- drop python 3.7
+
 ### v0.1.3
 - depend on `typer-slim`
 - use strict typing
