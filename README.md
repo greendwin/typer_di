@@ -67,6 +67,9 @@ def second(..., config: Config = Depends(get_config)):
 
 ## Release Notes
 
+### v0.1.5
+- update package meta info for python 3.14
+
 ### v0.1.4
 - support python 3.14
 - drop python 3.7
